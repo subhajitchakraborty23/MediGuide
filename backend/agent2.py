@@ -84,12 +84,7 @@ Current Medications: {intake_data.get('medications', 'None mentioned')}
 
 Produce the triage JSON now.
 """
-        response = client.messages.create(
-            model="claude-opus-4-5",
-            max_tokens=800,
-            system=TRIAGE_SYSTEM_PROMPT,
-            messages=[{"role": "user", "content": prompt}]
-        )
+        response = client.invoke(prompt)
 
         raw = response.content[0].text.strip()
 
