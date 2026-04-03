@@ -262,6 +262,12 @@ npm run dev
 
 ### Agent 1: Multilingual Chat Agent
 
+<<<<<<< HEAD
+
+=======
+
+> > > > > > > 7985c1ce49d53d2f84a80c1216707adb9f7fbb92
+
 - **AI**: Google Gemini 2.5 Flash via LangChain (`.invoke()`)
 - **Inputs**: Tourist's free-text symptom description in any language
 - **Outputs**: Structured intake JSON — symptoms, duration, allergies, detected language
@@ -271,7 +277,15 @@ npm run dev
   - `<EMERGENCY>true</EMERGENCY>` triggers immediate emergency protocol
   - Multi-turn conversation until sufficient data is collected
 
+<<<<<<< HEAD
+
 ### Agent 2: Triage & Severity Assessment _(Upgraded)_
+
+=======
+
+### Agent 2: Triage & Severity Assessment _(Upgraded)_
+
+> > > > > > > 7985c1ce49d53d2f84a80c1216707adb9f7fbb92
 
 - **AI**: Claude claude-opus-4-5
 - **Inputs**: Intake data from Agent 1, optional age + gender
@@ -283,7 +297,15 @@ npm run dev
   - **Second opinion**: Triggered automatically when score is borderline (5 or 6) — second LLM call reviews independently, higher score wins
   - **Python red flag safety net**: Keyword scan catches critical terms (chest pain, can't breathe) independent of LLM output
 
+<<<<<<< HEAD
+
 ### Agent 3: Nearest Hospital Finder _(Refactored)_
+
+=======
+
+### Agent 3: Nearest Hospital Finder _(Refactored)_
+
+> > > > > > > 7985c1ce49d53d2f84a80c1216707adb9f7fbb92
 
 - **APIs**: Google Places Nearby Search + Google Directions API
 - **AI**: Claude — only for final tourist-facing message
@@ -296,7 +318,15 @@ npm run dev
   - Real-time ambulance routing via Directions API for severity 7+
   - Mock hospital fallback when Google API unavailable
 
+<<<<<<< HEAD
+
 ### Agent 4: Booking & Coordination _(Upgraded)_
+
+=======
+
+### Agent 4: Booking & Coordination _(Upgraded)_
+
+> > > > > > > 7985c1ce49d53d2f84a80c1216707adb9f7fbb92
 
 - **AI**: Claude — only for generating notification messages
 - **Inputs**: Matched provider, triage result, tourist info
@@ -308,7 +338,15 @@ npm run dev
   - **Hospital-side notification**: Separate `hospital_portal` channel with professional message template
   - **1-hour reminder**: Python `threading.Thread` fires reminder to tourist + hospital before appointment (replace with Celery in production)
 
+<<<<<<< HEAD
+
 ### Agent 5: Cost Estimator _(Upgraded)_
+
+=======
+
+### Agent 5: Cost Estimator _(Upgraded)_
+
+> > > > > > > 7985c1ce49d53d2f84a80c1216707adb9f7fbb92
 
 - **AI**: Claude — only for friendly cost summary text
 - **Inputs**: Triage result, matched provider, tourist info (with insurance plan + home currency)
@@ -320,6 +358,12 @@ npm run dev
   - **Cheaper alternatives**: Pure Python lookup returns up to 3 concrete options (government OPD, telemedicine, local clinic) — only for severity ≤ 6 and out-of-pocket > ₹1,000
 
 ### Agent 6: Document Generator
+
+<<<<<<< HEAD
+
+=======
+
+> > > > > > > 7985c1ce49d53d2f84a80c1216707adb9f7fbb92
 
 - **AI**: Claude claude-opus-4-5 + CraftMyPDF
 - **Inputs**: Complete patient journey — intake, triage, booking, cost estimate
@@ -342,6 +386,12 @@ Response: { "status": "ok" }
 
 ### Webhook Integration
 
+<<<<<<< HEAD
+
+=======
+
+> > > > > > > 7985c1ce49d53d2f84a80c1216707adb9f7fbb92
+
 ```
 POST /webhooks/clerk
 POST /webhooks/events
@@ -349,6 +399,12 @@ Content-Type: application/json
 ```
 
 ### Usage Example
+
+<<<<<<< HEAD
+
+=======
+
+> > > > > > > 7985c1ce49d53d2f84a80c1216707adb9f7fbb92
 
 ```bash
 # Health check
@@ -361,29 +417,55 @@ curl http://localhost:8000/health
 
 ### Backend (.env)
 
-| Variable                    | Description                   | Required    |
+<<<<<<< HEAD
+| Variable | Description | Required |
 | --------------------------- | ----------------------------- | ----------- |
-| `ANTHROPIC_API_KEY`         | Claude API key                | ✅          |
-| `GOOGLE_API_KEY`            | Google Generative AI (Gemini) | ✅          |
-| `GOOGLE_PLACES_API_KEY`     | Hospital search + price level | ✅          |
-| `GOOGLE_DIRECTIONS_API_KEY` | Ambulance routing             | ⚪ Optional |
-| `MONGODB_URI`               | MongoDB connection string     | ✅          |
-| `CLERK_SECRET_KEY`          | Auth backend secret           | ✅          |
-| `CRAFT_MY_PDF_API_KEY`      | PDF generation                | ✅          |
-| `INSURANCE_API_URL`         | Insurer REST API endpoint     | ⚪ Optional |
-| `INSURANCE_API_KEY`         | Insurer API auth key          | ⚪ Optional |
-| `RAZORPAY_KEY_ID`           | Payment gateway key           | ⚪ Optional |
-| `RAZORPAY_KEY_SECRET`       | Payment gateway secret        | ⚪ Optional |
+| `ANTHROPIC_API_KEY` | Claude API key | ✅ |
+| `GOOGLE_API_KEY` | Google Generative AI (Gemini) | ✅ |
+| `GOOGLE_PLACES_API_KEY` | Hospital search + price level | ✅ |
+| `GOOGLE_DIRECTIONS_API_KEY` | Ambulance routing | ⚪ Optional |
+| `MONGODB_URI` | MongoDB connection string | ✅ |
+| `CLERK_SECRET_KEY` | Auth backend secret | ✅ |
+| `CRAFT_MY_PDF_API_KEY` | PDF generation | ✅ |
+| `INSURANCE_API_URL` | Insurer REST API endpoint | ⚪ Optional |
+| `INSURANCE_API_KEY` | Insurer API auth key | ⚪ Optional |
+| `RAZORPAY_KEY_ID` | Payment gateway key | ⚪ Optional |
+| `RAZORPAY_KEY_SECRET` | Payment gateway secret | ⚪ Optional |
+=======
+| Variable | Description | Required |
+|---|---|---|
+| `ANTHROPIC_API_KEY` | Claude API key | ✅ |
+| `GOOGLE_API_KEY` | Google Generative AI (Gemini) | ✅ |
+| `GOOGLE_PLACES_API_KEY` | Hospital search + price level | ✅ |
+| `GOOGLE_DIRECTIONS_API_KEY` | Ambulance routing | ⚪ Optional |
+| `MONGODB_URI` | MongoDB connection string | ✅ |
+| `CLERK_SECRET_KEY` | Auth backend secret | ✅ |
+| `CRAFT_MY_PDF_API_KEY` | PDF generation | ✅ |
+| `INSURANCE_API_URL` | Insurer REST API endpoint | ⚪ Optional |
+| `INSURANCE_API_KEY` | Insurer API auth key | ⚪ Optional |
+| `RAZORPAY_KEY_ID` | Payment gateway key | ⚪ Optional |
+| `RAZORPAY_KEY_SECRET` | Payment gateway secret | ⚪ Optional |
+
+> > > > > > > 7985c1ce49d53d2f84a80c1216707adb9f7fbb92
 
 > ⚪ Optional keys enable real integrations. Without them, agents fall back to mock data gracefully — the pipeline never crashes.
 
 ### Frontend (.env.local)
 
-| Variable                            | Description        |
+<<<<<<< HEAD
+| Variable | Description |
 | ----------------------------------- | ------------------ |
 | `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` | Clerk frontend key |
-| `CLERK_SECRET_KEY`                  | Clerk backend key  |
-| `NEXT_PUBLIC_API_URL`               | Backend API URL    |
+| `CLERK_SECRET_KEY` | Clerk backend key |
+| `NEXT_PUBLIC_API_URL` | Backend API URL |
+=======
+| Variable | Description |
+|---|---|
+| `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` | Clerk frontend key |
+| `CLERK_SECRET_KEY` | Clerk backend key |
+| `NEXT_PUBLIC_API_URL` | Backend API URL |
+
+> > > > > > > 7985c1ce49d53d2f84a80c1216707adb9f7fbb92
 
 ---
 
@@ -398,11 +480,23 @@ python orchestrator.py
 
 ### Demo Mode (sample data, no typing)
 
+<<<<<<< HEAD
+
 ```bash
 python orchestrator.py --demo
 ```
 
 ### Test Individual Agents
+
+=======
+
+```bash
+python orchestrator.py --demo
+```
+
+### Test Individual Agents
+
+> > > > > > > 7985c1ce49d53d2f84a80c1216707adb9f7fbb92
 
 ```bash
 python agent2.py    # Triage with sample chest pain case
@@ -426,14 +520,26 @@ python agent5.py    # Cost estimate with mock insurance + payment link
 
 ## 📊 Database Schema (MongoDB)
 
-| Collection      | Contents                                              |
+<<<<<<< HEAD
+| Collection | Contents |
 | --------------- | ----------------------------------------------------- |
-| `users`         | Tourist profiles and preferences                      |
-| `consultations` | Medical consultation records                          |
-| `bookings`      | Hospital appointment bookings with reschedule history |
-| `documents`     | Generated medical PDFs                                |
-| `costs`         | Cached cost estimates                                 |
-| `notifications` | Full notification log (SMS, email, hospital portal)   |
+| `users` | Tourist profiles and preferences |
+| `consultations` | Medical consultation records |
+| `bookings` | Hospital appointment bookings with reschedule history |
+| `documents` | Generated medical PDFs |
+| `costs` | Cached cost estimates |
+| `notifications` | Full notification log (SMS, email, hospital portal) |
+=======
+| Collection | Contents |
+|---|---|
+| `users` | Tourist profiles and preferences |
+| `consultations` | Medical consultation records |
+| `bookings` | Hospital appointment bookings with reschedule history |
+| `documents` | Generated medical PDFs |
+| `costs` | Cached cost estimates |
+| `notifications` | Full notification log (SMS, email, hospital portal) |
+
+> > > > > > > 7985c1ce49d53d2f84a80c1216707adb9f7fbb92
 
 ---
 
@@ -464,15 +570,28 @@ npm run build && npm start
 
 ## 🐛 Troubleshooting
 
-| Problem                                                  | Solution                                                                                            |
+<<<<<<< HEAD
+| Problem | Solution |
 | -------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
-| `ModuleNotFoundError: No module named 'agent1'`          | Run from `backend/` directory                                                                       |
-| `anthropic.APIConnectionError`                           | Check `ANTHROPIC_API_KEY` in `.env`                                                                 |
-| `ChatGoogleGenerativeAI` crash with `.messages.create()` | Use `.invoke()` for LangChain Gemini clients                                                        |
-| Slot conflict on booking                                 | Agent 4 returns `{"status": "conflict"}` — orchestrator should call Agent 3 for next available slot |
-| Insurance coverage shows `"source": "local_benchmark"`   | Set `INSURANCE_API_URL` + `INSURANCE_API_KEY` in `.env` for real verification                       |
-| Payment link shows `"source": "mock_gateway"`            | Set `RAZORPAY_KEY_ID` + `RAZORPAY_KEY_SECRET` for real payment links                                |
-| `pymongo.errors.ServerSelectionTimeoutError`             | Check MongoDB URI and network access                                                                |
+| `ModuleNotFoundError: No module named 'agent1'` | Run from `backend/` directory |
+| `anthropic.APIConnectionError` | Check `ANTHROPIC_API_KEY` in `.env` |
+| `ChatGoogleGenerativeAI` crash with `.messages.create()` | Use `.invoke()` for LangChain Gemini clients |
+| Slot conflict on booking | Agent 4 returns `{"status": "conflict"}` — orchestrator should call Agent 3 for next available slot |
+| Insurance coverage shows `"source": "local_benchmark"` | Set `INSURANCE_API_URL` + `INSURANCE_API_KEY` in `.env` for real verification |
+| Payment link shows `"source": "mock_gateway"` | Set `RAZORPAY_KEY_ID` + `RAZORPAY_KEY_SECRET` for real payment links |
+| `pymongo.errors.ServerSelectionTimeoutError` | Check MongoDB URI and network access |
+=======
+| Problem | Solution |
+|---|---|
+| `ModuleNotFoundError: No module named 'agent1'` | Run from `backend/` directory |
+| `anthropic.APIConnectionError` | Check `ANTHROPIC_API_KEY` in `.env` |
+| `ChatGoogleGenerativeAI` crash with `.messages.create()` | Use `.invoke()` for LangChain Gemini clients |
+| Slot conflict on booking | Agent 4 returns `{"status": "conflict"}` — orchestrator should call Agent 3 for next available slot |
+| Insurance coverage shows `"source": "local_benchmark"` | Set `INSURANCE_API_URL` + `INSURANCE_API_KEY` in `.env` for real verification |
+| Payment link shows `"source": "mock_gateway"` | Set `RAZORPAY_KEY_ID` + `RAZORPAY_KEY_SECRET` for real payment links |
+| `pymongo.errors.ServerSelectionTimeoutError` | Check MongoDB URI and network access |
+
+> > > > > > > 7985c1ce49d53d2f84a80c1216707adb9f7fbb92
 
 ---
 
