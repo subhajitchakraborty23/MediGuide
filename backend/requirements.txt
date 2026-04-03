@@ -11,3 +11,5 @@ clerk-backend-api
 sqlalchemy
 psycopg2-binary
 asyncpg
+langchain
+langchain-google-genai

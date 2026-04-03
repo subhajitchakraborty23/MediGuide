@@ -3,6 +3,7 @@ from ..database.db import Base
 from datetime import datetime
 from sqlalchemy.orm import relationship
 
+
 class User(Base):
     __tablename__ = "users"
 
@@ -12,6 +13,10 @@ class User(Base):
     name = Column(String)
     avatar_url = Column(String)
     created_at = Column(DateTime, default=datetime.utcnow)
+
+    symptom_reports = relationship("SymptomReport", back_populates="user")
+    bookings = relationship("Booking", back_populates="user")
+
 
 class SymptomReport(Base):
     __tablename__ = "symptom_reports"
@@ -24,37 +29,44 @@ class SymptomReport(Base):
     recommended_specialty = Column(String)
     user_latitude = Column(Float)
     user_longitude = Column(Float)
+    user_language = Column(String, default="en")
     created_at = Column(DateTime, default=datetime.utcnow)
 
     user = relationship("User", back_populates="symptom_reports")
+    bookings = relationship("Booking", back_populates="symptom_report")
+
 
 class Booking(Base):
-  __tablename__ = "bookings"
+    __tablename__ = "bookings"
 
-  id = Column(Integer, primary_key=True, index=True)
-  user_id = Column(Integer, ForeignKey("users.id"), nullable=True)
-  hospital_id = Column(Integer, ForeignKey("hospitals.id"))
-  symptom_report_id = Column(Integer, ForeignKey("symptom_reports.id"), nullable=True)
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=True)
+    symptom_report_id = Column(Integer, ForeignKey("symptom_reports.id"), nullable=True)
 
-  patient_name = Column(String)
-  patient_age = Column(Integer)
-  patient_gender = Column(String)
-  patient_blood_type = Column(String)
-  patient_allergies = Column(Text)
-  emergency_contact_name = Column(String)
-  emergency_contact_phone = Column(String)
-  emergency_contact_email = Column(String)
+    hospital_place_id = Column(String)
+    hospital_name = Column(String)
+    hospital_address = Column(String)
+    hospital_phone = Column(String)
 
-  appointment_time = Column(DateTime)
-  status = Column(String, default="pending")
-  ambulance_requested = Column(Boolean, default=False)
-  notes = Column(Text)
-  estimated_cost_usd = Column(Integer)
+    patient_name = Column(String)
+    patient_age = Column(Integer)
+    patient_gender = Column(String)
+    patient_blood_type = Column(String)
+    patient_allergies = Column(Text)
+    emergency_contact_name = Column(String)
+    emergency_contact_phone = Column(String)
+    emergency_contact_email = Column(String)
 
-  family_report_sent = Column(Boolean, default=False)
-  family_report_text = Column(Text)
+    appointment_time = Column(DateTime)
+    status = Column(String, default="pending")
+    ambulance_requested = Column(Boolean, default=False)
+    notes = Column(Text)
+    estimated_cost_usd = Column(Integer)
 
-  created_at = Column(DateTime, default=datetime.utcnow)
+    family_report_sent = Column(Boolean, default=False)
+    family_report_text = Column(Text)
 
-  user = relationship("User", back_populates="bookings")
-  symptom_report = relationship("SymptomReport", back_populates="bookings")
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+    user = relationship("User", back_populates="bookings")
+    symptom_report = relationship("SymptomReport", back_populates="bookings")
