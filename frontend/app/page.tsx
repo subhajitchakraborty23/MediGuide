@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { NavBar } from "@/components/NavBar";
 import { Hero } from "@/components/Hero";
 import { Features } from "@/components/Features";
 import { Stats } from "@/components/Stats";
@@ -10,7 +9,6 @@ import { motion } from "framer-motion";
 export default function HomePage() {
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden selection:bg-primary selection:text-black">
-      <NavBar />
       <main>
         <Hero />
         <Stats />

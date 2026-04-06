@@ -8,6 +8,7 @@ import {
 } from "@clerk/nextjs";
 import { Barlow, Bebas_Neue } from "next/font/google";
 import "./globals.css";
+import { NavBar } from "@/components/NavBar";
 
 const barlow = Barlow({
   variable: "--font-barlow",
@@ -34,7 +35,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${barlow.variable} ${bebasNeue.variable} antialiased`}>
-        <ClerkProvider>{children}</ClerkProvider>
+        <ClerkProvider>
+          <NavBar />
+          {children}
+        </ClerkProvider>
       </body>
     </html>
   );
