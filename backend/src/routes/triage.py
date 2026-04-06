@@ -164,6 +164,7 @@ class HospitalResult(BaseModel):
     address: str
     phone: Optional[str]
     rating: Optional[float]
+    user_ratings_total: Optional[int]
     distance_km: float
     open_now: Optional[bool]
     match_score: float
@@ -357,6 +358,27 @@ Produce the triage JSON now.
         return triage_result
 
 
+async def fetch_place_rating_count(place_id: str) -> Optional[int]:
+    """Fetch the number of user ratings for a place from Google Places Details API"""
+    if not GOOGLE_PLACES_API_KEY or not place_id:
+        return None
+
+    url = "https://maps.googleapis.com/maps/api/place/details/json"
+    params = {
+        "place_id": place_id,
+        "fields": "user_ratings_total",
+        "key": GOOGLE_PLACES_API_KEY,
+    }
+    try:
+        async with httpx.AsyncClient(timeout=8) as http:
+            response = await http.get(url, params=params)
+        if response.status_code == 200:
+            return response.json().get("result", {}).get("user_ratings_total")
+    except Exception:
+        pass
+    return None
+
+
 async def fetch_nearby_hospitals(lat: float, lng: float, radius_meters: int) -> list[dict]:
     if not GOOGLE_PLACES_API_KEY:
         raise HTTPException(status_code=500, detail="GOOGLE_PLACES_API_KEY not set in .env")
@@ -383,18 +405,34 @@ async def fetch_nearby_hospitals(lat: float, lng: float, radius_meters: int) -> 
         )
 
     results = []
+    places_with_ids = []
+
     for place in data.get("results", []):
         loc = place.get("geometry", {}).get("location", {})
-        results.append({
+        place_data = {
             "place_id": place.get("place_id", ""),
             "name": place.get("name", "Unknown"),
             "address": place.get("vicinity", ""),
             "latitude": loc.get("lat"),
             "longitude": loc.get("lng"),
             "rating": place.get("rating"),
+            "user_ratings_total": None,  # Will be fetched via API
             "open_now": place.get("opening_hours", {}).get("open_now"),
             "types": place.get("types", []),
-        })
+        }
+        results.append(place_data)
+        if place_data["place_id"]:
+            places_with_ids.append((place_data, place_data["place_id"]))
+
+    # Fetch user_ratings_total in parallel for all places
+    if places_with_ids:
+        rating_counts = await asyncio.gather(
+            *[fetch_place_rating_count(place_id) for _, place_id in places_with_ids],
+            return_exceptions=True
+        )
+        for (place_data, _), count in zip(places_with_ids, rating_counts):
+            if isinstance(count, int):
+                place_data["user_ratings_total"] = count
 
     return results
 
@@ -442,6 +480,26 @@ async def triage(request: TriageRequest, db: AsyncSession = Depends(get_db)):
     urgency_label = triage_assessment.get("urgency_label", "medium")
     severity_score = triage_assessment.get("severity_score", 5)
 
+    # Bayesian averaging for rating normalization
+    # Places with few ratings are weighted toward the global average
+    MIN_CONFIDENCE_THRESHOLD = 30  # Require at least 30 ratings to trust the rating
+    GLOBAL_AVERAGE_RATING = 4.0    # Assumed average rating for unranked places
+
+    def calculate_bayesian_rating(rating: Optional[float], user_ratings_total: Optional[int]) -> float:
+        """
+        Calculate Bayesian average rating.
+        Penalizes places with very few ratings to avoid bias toward single perfect ratings.
+        Formula: (rating * count + global_avg * threshold) / (count + threshold)
+        """
+        if not rating or not user_ratings_total:
+            return 0.0  # No rating data
+
+        bayesian_avg = (
+            (rating * user_ratings_total) + (GLOBAL_AVERAGE_RATING * MIN_CONFIDENCE_THRESHOLD)
+        ) / (user_ratings_total + MIN_CONFIDENCE_THRESHOLD)
+
+        return bayesian_avg
+
     scored = []
     for h in nearby_hospitals:
         score = 0.0
@@ -452,9 +510,12 @@ async def triage(request: TriageRequest, db: AsyncSession = Depends(get_db)):
         score += dist_score * 35
         reason_parts.append(f"{dist} km away")
 
+        # Use Bayesian rating instead of raw rating
         if h.get("rating"):
-            score += h["rating"] * 5
-            reason_parts.append(f"rated {h['rating']}/5")
+            bayesian_rating = calculate_bayesian_rating(h["rating"], h.get("user_ratings_total"))
+            score += bayesian_rating * 5
+            rating_count = h.get("user_ratings_total", "?")
+            reason_parts.append(f"rated {h['rating']}/5 ({rating_count} reviews)")
 
         if h.get("open_now") is True:
             score += 15
@@ -501,6 +562,7 @@ async def triage(request: TriageRequest, db: AsyncSession = Depends(get_db)):
             address=h["address"],
             phone=phone,
             rating=h.get("rating"),
+            user_ratings_total=h.get("user_ratings_total"),
             distance_km=h["distance_km"],
             open_now=h.get("open_now"),
             match_score=h["score"],
