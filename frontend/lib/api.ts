@@ -45,36 +45,49 @@ export interface TriageResponse {
 }
 
 export interface BookingRequest {
+  symptom_report_id?: number;
+  user_id?: number;
+  
   hospital_place_id: string;
   hospital_name: string;
   hospital_address: string;
   hospital_phone?: string;
-  symptom_report_id?: number;
+  
   patient_name: string;
   patient_age: number;
   patient_gender: string;
   patient_blood_type?: string;
   patient_allergies?: string;
+  
   emergency_contact_name: string;
   emergency_contact_phone: string;
   emergency_contact_email?: string;
+  
+  appointment_time: string;
   ambulance_requested?: boolean;
-  notes?: string;
+  
+  symptoms?: string;
+  severity_score?: number;
+  recommended_specialty?: string;
 }
 
 export interface BookingResponse {
   booking_id: number;
+  status: string;
   hospital_name: string;
   hospital_address: string;
-  hospital_phone: string;
-  status: string;
+  appointment_time: string;
+  patient_name: string;
   ambulance_requested: boolean;
-  estimated_cost_usd: number | null;
-  patient_intake_summary: string;
+  estimated_cost_usd: number;
+  intake_note: string;
+  created_at: string;
 }
 
 export interface FamilyReportResponse {
-  report: string;
+  booking_id: number;
+  family_report_text: string;
+  generated_at: string;
 }
 
 export async function triageSymptoms(
@@ -109,17 +122,10 @@ export async function createBooking(
 
 export async function generateFamilyReport(
   bookingId: number,
-  diagnosisNotes?: string,
-  actualCostUsd?: number,
 ): Promise<FamilyReportResponse> {
-  const res = await fetch(`${API_URL}/bookings/family-report`, {
+  const res = await fetch(`${API_URL}/bookings/${bookingId}/family-report`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      booking_id: bookingId,
-      diagnosis_notes: diagnosisNotes,
-      actual_cost_usd: actualCostUsd,
-    }),
   });
   if (!res.ok) {
     const err = await res.json().catch(() => ({}));

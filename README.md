@@ -430,6 +430,4 @@ Proprietary — All rights reserved © MediGuide 2025
 
 Built for travelers. Designed for emergencies. Powered by AI.
 
-**[mediguide.com](https://mediguide.com)** · [support@mediguide.com](mailto:support@mediguide.com)
-
 </div>
