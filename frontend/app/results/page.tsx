@@ -549,6 +549,73 @@ export default function ResultsPage() {
           </div>
         </div>
 
+        {/* Pharmacy Option for Low Severity */}
+        {result.severity === "low" && (
+          <div
+            className={`card ${mounted ? "fade-up-delay-2" : ""}`}
+            style={{
+              padding: "1.5rem",
+              marginBottom: "1.5rem",
+              background: "rgba(34,197,94,0.05)",
+              border: "1px solid rgba(34,197,94,0.2)",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                alignItems: "flex-start",
+                gap: "1rem",
+              }}
+            >
+              <div
+                style={{
+                  fontSize: "2rem",
+                  minWidth: "2.5rem",
+                }}
+              >
+                💊
+              </div>
+              <div style={{ flex: 1 }}>
+                <h3
+                  style={{
+                    fontSize: "1rem",
+                    fontWeight: 600,
+                    color: "var(--foreground)",
+                    marginBottom: "0.5rem",
+                  }}
+                >
+                  No Doctor Visit Needed
+                </h3>
+                <p
+                  style={{
+                    color: "var(--foreground-dim)",
+                    fontSize: "0.9rem",
+                    marginBottom: "1rem",
+                    lineHeight: 1.6,
+                  }}
+                >
+                  Based on your assessment, you don't need to visit a doctor
+                  right now. If you need any over-the-counter medications, you
+                  can visit a nearby pharmacy to get what you need.
+                </p>
+                <Link href="/pharmacy">
+                  <button
+                    className="btn-primary"
+                    style={{
+                      background: "#22c55e",
+                      color: "#ffffff",
+                      padding: "0.75rem 1.5rem",
+                      fontSize: "0.9rem",
+                    }}
+                  >
+                    Find Nearby Pharmacies →
+                  </button>
+                </Link>
+              </div>
+            </div>
+          </div>
+        )}
+
         <div className={mounted ? "fade-up-delay-3" : ""}>
           <div
             style={{

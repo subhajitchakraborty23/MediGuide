@@ -40,10 +40,19 @@ export function NavBar() {
             >
               Impact
             </Link>
+            <Link
+              href="/pharmacy"
+              className="text-sm font-medium text-white/70 hover:text-primary transition-colors"
+            >
+              Find Pharmacy
+            </Link>
           </nav>
         </div>
         <div className="flex items-center gap-4">
           {user.isSignedIn ? <UserButton /> : <SignInButton mode="modal" />}
+          <Link href="/pharmacy">
+            <Button variant="outline">Find Pharmacy</Button>
+          </Link>
           <Link href="/triage">
             <Button className="bg-primary text-black hover:bg-primary/90">
               Get Help Now
